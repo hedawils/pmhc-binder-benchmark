@@ -1,0 +1,15 @@
+# reproduce.py needs nothing beyond the standard library -- that is deliberate,
+# so the headline results can be checked without installing anything:
+#
+#     python3 analysis/reproduce.py
+#
+# The rest of analysis/ needs these.
+
+numpy>=1.24          # contact geometry, composition, specificity scoring
+biopython>=1.81      # PDB parsing (clash_detail.py, survey.py)
+pypdf>=3.0           # pdftxt.py, text extraction from the source papers
+
+# Figure pipeline only. PyMOL is not installable from PyPI -- use conda:
+#     conda install -c conda-forge pymol-open-source
+# Needed by turntable.py, export_parts.py, exptest.py.
+trimesh>=4.0         # build_glb.py, assembles the PowerPoint 3D model

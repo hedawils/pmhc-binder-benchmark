@@ -1,0 +1,19 @@
+### micromamba 2.10.0
+  Name  Active  Path                             
+───────────────────────────────────────────────────
+  base  *       /home/ubuntu/micromamba          
+  af2           /home/ubuntu/micromamba/envs/af2 
+  mpnn          /home/ubuntu/micromamba/envs/mpnn
+### docker images
+rfdiffusion:fixed  3eedb3980c80  2026-10-30 11:26:13 +0000 UTC  18.9GB
+rfdiffusion:latest  6d78bbd4c4cc  2026-10-30 11:07:43 +0000 UTC  18.8GB
+### docker version
+Docker version 29.4.1, build 055a478
+### ProteinMPNN commit
+8907e66
+### af2 params
+/home/ubuntu/pmhc/dl_binder_design/af2_initial_guess/model_weights/params/params_model_1.npz 373069562
+/home/ubuntu/pmhc/dl_binder_design/af2_initial_guess/model_weights/params/params_model_1_multimer_v3.npz 373043148
+/home/ubuntu/pmhc/dl_binder_design/af2_initial_guess/model_weights/params/params_model_1_ptm.npz 373103340
+/home/ubuntu/pmhc/dl_binder_design/af2_initial_guess/model_weights/params/params_model_2.npz 373069562
+/home/ubuntu/pmhc/dl_binder_design/af2_initial_guess/model_weights/params/params_model_2_multimer_v3.npz 373043148

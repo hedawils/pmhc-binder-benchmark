@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+venv/
+frames/
+parts/
+*.egg-info/
+
+# 131 MB of designed structures. Distributed as a GitHub release asset or a
+# Zenodo deposit rather than in-tree, so cloning stays cheap. Delete this line
+# to track them instead -- easier now than after they are in the history.
+structures/

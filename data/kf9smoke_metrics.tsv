@@ -1,0 +1,2 @@
+backbone_id	seq_id	description	scrmsd	plddt_binder	pae_interaction	peptide_focus	buried_peptide	buried_mhc	plddt_target	target_aligned_rmsd
+kf9scaf1_0	0	kf9scaf1_0_dldesign_0_af2pred	0.853	93.102	24.412	0.0000	0.0	63.7	96.421	8.441

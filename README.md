@@ -98,8 +98,13 @@ rather than as a threshold:
 | KF9 repurposed | 22.0% | 31.0% |
 | KF9 free | 22.2% | 25.8% |
 
-**~70% of every surviving interface is the MHC.** This matters clinically: a binder that
-grips the groove rather than the peptide engages every nucleated cell, not the tumour.
+**~70% of every surviving interface is the MHC.** That is not by itself alarming — natural TCRs
+also bury far more MHC than peptide, and are exquisitely peptide-specific — and every design here
+clears the `peptide_focus` gate, so all of them engage the peptide to some degree. What the
+fraction says is where the binding surface sits, not whether the binder discriminates; that
+question belongs to the specificity filter below. The reason to track it is that surface on the
+MHC is surface on a polymorphic, universally expressed protein, so the more of the interface it
+carries, the more a design's behaviour depends on the allele rather than the antigen.
 
 Across all 550 NY-ESO-1 designs with a real interface the median is 30%, the 95th percentile 47%,
 and the maximum **69.8%** — peptide-dominant designs do get generated.

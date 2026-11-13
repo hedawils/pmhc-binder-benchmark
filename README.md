@@ -104,28 +104,13 @@ Note that hotspots were specified as peptide residues only (`C4,C5,C7,C8` and `C
 No MHC residue was ever named, and the interfaces came out 70% MHC regardless — hotspot
 specification does not control interface composition.
 
-### A specificity filter, and what it measures
+### A specificity filter
 
 Beyond the four gates, each design is scored for whether its interface *prefers* its own peptide.
-
-**The approach is Liu et al.'s, not mine.** They describe scoring "the likelihood of each peptide
-residue being predicted when in complex with a binder", filtering on the log probability of the
-on-target residue or on the difference to that residue mutated to alanine. What is added here:
-
-- **Whole decoy peptides** rather than alanine substitution alone. MPNN reads only backbone atoms,
-  so swapping in a decoy means relabelling nine residues — no repacking, no threading — which makes
-  an off-target panel nearly free.
-- **A holo − apo baseline** rather than raw log probability or the alanine difference. Scoring the
-  same complex with the binder chain deleted and subtracting removes the groove's own preference.
-- **One pass instead of nine.** `--conditional_probs_only` returns p(s_i | s_{j≠i}, X) for every
-  position at once, each residue already scored with the others held fixed. Efficiency only; it
-  computes the same quantity.
-
-Their alanine-difference filter is computed here too (`logp_ala`, `delta_ala` in
-`data/*_specificity.tsv`). Comparing the two over designs, the decoy panel matters more to how
-designs rank than the choice of baseline does — `analysis/reproduce.py` prints the detail.
-
-Where the baseline is not optional is in reading the result per position.
+The approach is **Liu et al.'s** — ProteinMPNN scoring of how predictable each peptide residue is
+in complex with the binder. Added here: whole decoy peptides rather than alanine substitution
+alone, and a **holo − apo baseline** — the same complex scored with the binder chain deleted, then
+subtracted — so the groove's own preference cancels out.
 
 Mean holo − apo per peptide position, NY-ESO-1:
 
@@ -137,27 +122,14 @@ free       -0.38  +0.05  -0.16  +0.92  +2.17  -0.33  +1.10  -0.13  -0.12
 KH46       -0.28  +0.01  -0.18  +1.06  +0.51  -0.33  +0.92  -0.41  -0.16
 ```
 
-The signal localises to **P4, P5 and P7** — the solvent-exposed positions a binder can reach — and
-is ~0 at **P2 and P9**, the canonical HLA-A\*02:01 anchors buried in the groove.
+The signal lands on **P4, P5 and P7** — the solvent-exposed positions a binder can reach — and is
+~0 at **P2 and P9**, the canonical HLA-A\*02:01 anchors buried in the groove. If the metric were
+reading the groove rather than the binder, the anchors would dominate. They do not. That is the
+closest thing here to a validation of the filter.
 
-The alanine baseline does not do this. Per design, mean over contacted positions minus mean over
-anchors:
-
-| arm | `delta` (holo − apo) | `delta_ala` (holo − Ala) |
-|---|---:|---:|
-| repurposed | **+1.27** (p < 1e-4) | −0.01 (p = 0.83) |
-| free | **+1.43** (p < 1e-4) | +0.31 (p = 0.023) |
-| KH46 | **+0.90** (p < 1e-4) | **−0.25** (p < 1e-4) |
-
-`delta` separates contacted positions from anchors in every arm. `delta_ala` does not, and on the
-KH46 arm it inverts — scoring the anchors *higher* than the positions the binder touches. Its
-largest value anywhere is P3 at +2.4 ± 0.3 across all 285 designs: large, consistent, and at a
-position buried in the groove that no binder reaches. That is a property of HLA-A\*02:01, not of
-any design.
-
-So the holo − apo subtraction is what makes "which positions does the binder read" an answerable
-question. It is the closest thing here to a validation of the filter — and the one place where the
-baseline choice, rather than the decoy panel, is doing the work.
+Method in `pipeline/scripts/score_specificity.py`; per-design numbers from
+`analysis/reproduce.py`, which also compares this baseline against the alanine difference Liu et
+al. describe.
 
 ### The positive control has the worst specificity
 
@@ -199,10 +171,8 @@ free diffusion at 5.5% in between, so some donors are worse than no donor. But a
 come from a **single source target**, so donor identity and locus cannot be separated in this
 design. No claim about HLA locus is supportable in either direction.
 
-**Where this touches Liu et al.'s filter, it compares methods and not results.** Their
-specificity numbers are not published, so the comparison is against *my implementation of the
-filter as they describe it*. Theirs also sits upstream of yeast display and characterisation;
-nothing here was checked against binding.
+**The specificity filter has never been checked against binding.** Liu et al.'s equivalent
+sits upstream of yeast display and characterisation; this one sits upstream of nothing.
 
 **The decoys are easy.** None of the four shares a residue with the target at the positions the
 binders actually read. The filter has not been tested against near-neighbour peptides.

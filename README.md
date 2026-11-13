@@ -23,9 +23,42 @@ Repurposing wins by **3.8× per design** on the first target and by **nothing** 
 4-subsets, so no RNG seed is involved). The per-design ratio likewise caps every arm at
 4 sequences per scaffold; uncapped it reads 4.19×.
 
-A design counts as a hit when it passes all four of: scRMSD < 2.0 Å, binder pLDDT > 92,
-interface pAE < 7.0, peptide_focus ≥ 0.202. Nothing here was expressed or measured — see
-[Limitations](#limitations).
+### The four gates
+
+**A design counts as a hit only if it clears all four.** They are applied identically to every
+arm, so no comparison here depends on where the thresholds sit — but the absolute hit rates do,
+and the gates are the single biggest assumption in this work.
+
+| gate | threshold | what it asks |
+|---|---|---|
+| **scRMSD** | < 2.0 Å | does the design refold to the backbone it was designed as? |
+| **binder pLDDT** | > 92 | is the binder confidently folded on its own? |
+| **interface pAE** | < 7.0 | is the predicted *relative placement* of binder and target confident? |
+| **peptide_focus** | ≥ 0.202 | is the binder gripping the peptide, or just the MHC platform? |
+
+The first three are standard practice for AF2-filtered binder design. **`peptide_focus` is custom
+to this work** and needs defining:
+
+```
+peptide_focus = buried_peptide / (buried_peptide + buried_mhc)
+```
+
+the fraction of the target's buried surface area that belongs to the 9-mer peptide rather than the
+MHC platform, computed as the change in solvent-accessible surface area of each target residue on
+binding. It exists because a pMHC binder that engages only the groove would bind every cell
+presenting that allele, regardless of which peptide is in it.
+
+The **0.202** threshold comes from crystal structures of known pMHC binders, where 0.236 separates
+genuine peptide engagement from platform binding — KH46's own crystal scores 0.328 — shifted down
+by 0.034 because AF2-predicted complexes score systematically below crystals on this measure.
+
+Two consequences worth stating up front. This gate is a *floor* on the quantity analysed in
+[Most of every interface is MHC](#most-of-every-interface-is-mhc-not-peptide) below — the two are
+the same metric, not independent findings. And it is the only gate that behaves differently
+between targets: inert on NY-ESO-1, where it removes nothing from either arm, but cutting both KF9
+arms hard (35→21 and 38→25).
+
+Nothing here was expressed or measured — see [Limitations](#limitations).
 
 ### Why it works when it works
 
@@ -48,7 +81,9 @@ penalty is larger. You pay the cost of borrowing and collect none of the benefit
 
 ### Most of every interface is MHC, not peptide
 
-Share of buried interface contributed by the peptide, in designs that passed all four gates:
+Share of buried interface contributed by the peptide, in designs that passed all four gates.
+This is `peptide_focus` from [the gates above](#the-four-gates), reported as a distribution
+rather than as a threshold:
 
 | arm | peptide share | best design |
 |---|---:|---:|

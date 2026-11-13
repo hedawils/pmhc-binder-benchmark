@@ -1,4 +1,4 @@
-# Does repurposing privileged scaffolds actually improve de novo binder design?
+# To what extent do privileged scaffolds improve de novo design of pMHC binders?
 
 A controlled benchmark of **partial diffusion from privileged scaffolds** against **free diffusion**,
 for de novo binders to peptide–MHC targets. Five arms, two targets, ~3,400 designs, identical

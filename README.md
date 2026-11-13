@@ -147,15 +147,31 @@ The KH46 arm has by far the **highest hit rate** (34.2%) and by far the **worst 
 effect: KH46 designs (128 aa) and free-diffusion designs (130 aa) are nearly the same length and
 sit at opposite ends of this table.
 
-Passing the gates and being selective are different things, and the arm that optimises the gates
-hardest is the least selective. If a single number is taken from this work, it should probably be
-this one.
+Passing the gates and being selective are different things, and here the arm that optimises the
+gates hardest is the least selective.
+
+How far that generalises is unclear: the 203 designs come from **one** source structure at one
+noise level, so this is a property of re-diffusing KH46 rather than a demonstrated property of
+re-diffusing proven binders. The mechanism is plausible — stay close to a pose selected for
+affinity and you inherit its interface, selective or not — but a second source structure is what
+would test it.
 
 ---
 
 ## Limitations
 
 Stated here rather than buried, because they bound what the numbers above can mean.
+
+**n = 2 targets.** Every claim about when repurposing helps rests on one target where it did
+and one where it did not. Two points cannot distinguish "depends on the target" from "worked
+once", and nothing here says which of NY-ESO-1 or KF9 is the unusual one. The per-design
+numbers within each target are well powered; the generalisation across targets is not.
+
+**n = 1 positive control, at one noise level.** The KH46 arm re-diffuses a single published
+binder at a single `partial_T`. It is that design's ceiling, not the target's, and its
+specificity result — the lowest of any arm — is a property of one source structure. Whether
+re-diffusing a proven binder generally produces poorly selective designs cannot be answered
+from one of them.
 
 **Nothing was expressed or measured.** Every result is a computational proxy that has never been
 checked against binding. The gates are standard practice, not validated ground truth.

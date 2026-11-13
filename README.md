@@ -4,7 +4,7 @@ A controlled benchmark of **partial diffusion from privileged scaffolds** agains
 for de novo binders to peptide–MHC targets. Five arms, two targets, ~3,400 designs, identical
 filters throughout.
 
-**Short answer: it depends on the target, and not in a way the method's framing predicts.**
+**Short answer: it depends on the target.**
 
 ---
 
@@ -20,8 +20,7 @@ filters throughout.
 
 Repurposing wins by **3.8× per design** on the first target and by **nothing** on the second
 (0.86×, p = 0.65). Per-scaffold rates are placed on a common 4-sequence basis (expectation over all
-4-subsets, so no RNG seed is involved). The per-design ratio likewise caps every arm at
-4 sequences per scaffold; uncapped it reads 4.19×.
+4-subsets, so no RNG seed is involved).
 
 ### The four gates
 
@@ -36,9 +35,8 @@ and the gates are the single biggest assumption in this work.
 | **interface pAE** | < 7.0 | is the predicted *relative placement* of binder and target confident? |
 | **peptide_focus** | ≥ 0.202 | is the binder gripping the peptide, or just the MHC platform? |
 
-The first three are standard practice for AF2-filtered binder design. The fourth is not standard,
-and I have not checked whether Liu et al. use an equivalent — treat it as a gate this work applies,
-not as one it invented:
+The first three are standard practice for AF2-filtered binder design. `peptide_focus` needs
+defining:
 
 ```
 peptide_focus = buried_peptide / (buried_peptide + buried_mhc)
@@ -50,7 +48,7 @@ binding. It exists because a pMHC binder that engages only the groove would bind
 presenting that allele, regardless of which peptide is in it.
 
 The **0.202** threshold comes from crystal structures of known pMHC binders, where 0.236 separates
-genuine peptide engagement from platform binding — KH46's own crystal scores 0.328 — shifted down
+genuine peptide engagement from MHC binding — KH46's own crystal scores 0.328 — shifted down
 by 0.034 because AF2-predicted complexes score systematically below crystals on this measure.
 
 Two consequences worth stating up front. This gate is a *floor* on the quantity analysed in
@@ -94,7 +92,7 @@ rather than as a threshold:
 | KF9 repurposed | 22.0% | 31.0% |
 | KF9 free | 22.2% | 25.8% |
 
-**~70% of every surviving interface is the MHC platform.** This matters clinically: a binder that
+**~70% of every surviving interface is the MHC.** This matters clinically: a binder that
 grips the groove rather than the peptide engages every nucleated cell, not the tumour.
 
 Across all 550 NY-ESO-1 designs with a real interface the median is 30%, the 95th percentile 47%,
@@ -287,7 +285,7 @@ transplanted onto the NY-ESO-1 groove without backbone clashes, leaving 142 (147
 Their stated rationale for partial diffusion is reduced computational cost; no per-design
 comparison against free diffusion is reported. Their readout is pooled yeast display over
 200–12,000 designs per target, which has no per-design denominator and so cannot measure hit-rate
-efficiency in either direction. That gap is what this benchmark is for.
+efficiency in either direction. That gap is what this benchmark begins to explore.
 
 Their Data S1 is consistent with the donor-heterogeneity result here: 8 of their 18 validated
 binders come from partial diffusion of a single scaffold (`mage-513`), which is the sole source of

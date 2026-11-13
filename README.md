@@ -195,12 +195,18 @@ sits upstream of yeast display and characterisation; this one sits upstream of n
 binders actually read. The filter has not been tested against near-neighbour peptides.
 
 **MPNN relax cycles were disabled** (`-relax_cycles 0`). Bennett et al. interleave Rosetta
-FastRelax with ProteinMPNN passes, so the backbone is repacked around each new sequence and the
-two co-adapt. Disabling it
-means every sequence was designed once, on the raw diffused backbone, with no relaxation. That is
-much cheaper — FastRelax dominates the CPU cost — and it was applied identically to all five arms,
-so it cannot bias the comparison between them. It does make every absolute hit rate here lower
-than the same pipeline would give run as published.
+FastRelax with ProteinMPNN passes so the backbone is repacked around each new sequence and the two
+co-adapt; the flag defaults to 1. Disabling it means every sequence was designed once, on the raw
+diffused backbone, with no relaxation.
+
+This was forced rather than chosen: `dl_interface_design.py` raises on
+`-seqs_per_struct > 1` whenever `-relax_cycles > 0`, so sampling several sequences per backbone —
+which the per-scaffold hit rates here require — is mutually exclusive with relaxation in this
+implementation. The alternative was one sequence per backbone, which collapses the per-design and
+per-scaffold distinction this benchmark rests on.
+
+It was applied identically to all five arms, so it cannot bias the comparison between them. It
+does make every absolute hit rate here lower than the same pipeline would give run with relax.
 
 **One more asymmetry worth noting:** the fourth gate removes nothing in either NY-ESO-1 arm, but
 cuts both KF9 arms hard (35→21 and 38→25). On that target a real share of interface-confident

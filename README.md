@@ -74,9 +74,15 @@ Repurposed scaffolds do **not** fold better than designs built from scratch. The
 
 † among designs that contact the peptide at all; unconditional medians are 0 in every arm.
 
-The entire advantage is **interface geometry** — the borrowed pose already points at the epitope.
-On the second target that advantage is absent on every interface measure, while the folding
-penalty is larger. You pay the cost of borrowing and collect none of the benefit.
+The pattern suggests the advantage is **interface geometry** rather than foldability — the
+borrowed pose already sits where a binder needs to be. On the second target the interface
+differences are absent on every measure while the fold penalty remains, which is consistent with
+the same reading: the geometry transfers only when it has somewhere to transfer to.
+
+Treat that as the most parsimonious account of the numbers, not as a demonstrated mechanism.
+Nothing here isolates geometry as the cause, and the arms differ in binder length as well as in
+starting point (130 residues free, median ~85 repurposed), which could contribute to the interface
+differences on its own.
 
 ### Most of every interface is MHC, not peptide
 
@@ -96,13 +102,17 @@ rather than as a threshold:
 grips the groove rather than the peptide engages every nucleated cell, not the tumour.
 
 Across all 550 NY-ESO-1 designs with a real interface the median is 30%, the 95th percentile 47%,
-and the maximum **69.8%** — peptide-dominant designs are generated, they just don't survive the
-filters. The gates reward large confident interfaces, and the largest available surface is the MHC.
-**The pipeline selects against the property you actually want.**
+and the maximum **69.8%** — peptide-dominant designs do get generated.
 
-Note that hotspots were specified as peptide residues only (`C4,C5,C7,C8` and `C1,C4,C7,C8`).
-No MHC residue was ever named, and the interfaces came out 70% MHC regardless — hotspot
-specification does not control interface composition.
+They are then slightly disfavoured by the other three gates. Among designs already clearing the
+`peptide_focus` bar of 20.2%, the median peptide share is 33.4%; among those that also clear
+scRMSD, pLDDT and interface pAE it falls to **30.7%** (p = 0.0002). KF9 behaves the same way,
+24.0% to 22.1% (p < 1e-4). The effect is small, but it runs the wrong way: the confidence filters
+mildly prefer designs that bury more MHC, which is the larger surface available.
+
+Note also that hotspots were specified as peptide residues only (`C4,C5,C7,C8` and
+`C1,C4,C7,C8`). No MHC residue was ever named, and the interfaces still came out ~70% MHC — in
+this pilot, hotspot specification did not control interface composition.
 
 ### A specificity filter
 

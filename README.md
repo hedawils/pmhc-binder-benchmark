@@ -194,9 +194,9 @@ sits upstream of yeast display and characterisation; this one sits upstream of n
 **The decoys are easy.** None of the four shares a residue with the target at the positions the
 binders actually read. The filter has not been tested against near-neighbour peptides.
 
-**MPNN relax cycles were disabled** (`-relax_cycles 0`). The published protocol alternates
-ProteinMPNN sequence design with Rosetta FastRelax over several rounds, so sequence and structure
-co-adapt and the backbone is repacked around each new sequence before the next pass. Disabling it
+**MPNN relax cycles were disabled** (`-relax_cycles 0`). Bennett et al. interleave Rosetta
+FastRelax with ProteinMPNN passes, so the backbone is repacked around each new sequence and the
+two co-adapt. Disabling it
 means every sequence was designed once, on the raw diffused backbone, with no relaxation. That is
 much cheaper — FastRelax dominates the CPU cost — and it was applied identically to all five arms,
 so it cannot bias the comparison between them. It does make every absolute hit rate here lower

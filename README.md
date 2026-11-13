@@ -263,9 +263,9 @@ The 152 privileged scaffolds come from Liu B et al., *Science*,
 transplanted onto the NY-ESO-1 groove without backbone clashes, leaving 142 (147 for KF9).
 
 Their stated rationale for partial diffusion is reduced computational cost; no per-design
-comparison against free diffusion is reported. Their readout is pooled yeast display over
-200–12,000 designs per target, which has no per-design denominator and so cannot measure hit-rate
-efficiency in either direction. That gap is what this benchmark begins to explore.
+comparison against free diffusion is reported. Any pipeline of this shape produces in-silico
+success rates as a by-product of AF2 filtering, so they will have had them; what is absent from
+the paper is the side-by-side. That gap is what this benchmark begins to explore.
 
 Their Data S1 is consistent with the donor-heterogeneity result here: 8 of their 18 validated
 binders come from partial diffusion of a single scaffold (`mage-513`), which is the sole source of

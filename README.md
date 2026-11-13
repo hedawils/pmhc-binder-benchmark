@@ -36,8 +36,9 @@ and the gates are the single biggest assumption in this work.
 | **interface pAE** | < 7.0 | is the predicted *relative placement* of binder and target confident? |
 | **peptide_focus** | ≥ 0.202 | is the binder gripping the peptide, or just the MHC platform? |
 
-The first three are standard practice for AF2-filtered binder design. **`peptide_focus` is custom
-to this work** and needs defining:
+The first three are standard practice for AF2-filtered binder design. The fourth is not standard,
+and I have not checked whether Liu et al. use an equivalent — treat it as a gate this work applies,
+not as one it invented:
 
 ```
 peptide_focus = buried_peptide / (buried_peptide + buried_mhc)
@@ -108,10 +109,25 @@ specification does not control interface composition.
 ### A specificity filter, and what it measures
 
 Beyond the four gates, each design is scored for whether its interface *prefers* its own peptide.
-ProteinMPNN is run in scoring mode (`--conditional_probs_only`) over the fixed backbone with the
-peptide relabelled to each of four decoys, and the per-position log-probability is taken as a
-**holo − apo difference** — with and without the binder chain present. That subtraction removes the
-groove's intrinsic preference and isolates the binder's contribution.
+
+**The approach is Liu et al.'s, not mine.** They describe scoring "the likelihood of each peptide
+residue being predicted when in complex with a binder", filtering on the log probability of the
+on-target residue or on the difference to that residue mutated to alanine. What is added here:
+
+- **One pass instead of nine.** `--conditional_probs_only` returns p(s_i | s_{j≠i}, X) for every
+  position at once, each residue already scored with the others held fixed, so per-residue runs
+  compute the same thing more slowly.
+- **A holo − apo baseline** rather than raw log probability or the alanine difference. The raw
+  number is dominated by the groove — HLA-A\*02:01 has strong anchor preferences at P2 and P9 that
+  a design reading nothing still inherits. Scoring the same complex with the binder chain deleted
+  and subtracting removes that baseline. On one design, raw holo was −25.5 against a −27.0 uniform
+  baseline; holo − apo was +2.74 on-target against −1.90 for a decoy.
+- **Whole decoy peptides** rather than alanine substitution alone. MPNN reads only backbone atoms,
+  so swapping in a decoy means relabelling nine residues — no repacking, no threading — which makes
+  an off-target panel nearly free.
+
+The alanine-difference filter as they describe it is computed too and stored alongside
+(`logp_ala`, `delta_ala` in `data/*_specificity.tsv`); it has not been analysed here.
 
 Mean holo − apo per peptide position, NY-ESO-1:
 

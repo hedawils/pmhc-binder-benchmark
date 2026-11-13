@@ -122,23 +122,10 @@ on-target residue or on the difference to that residue mutated to alanine. What 
   computes the same quantity.
 
 Their alanine-difference filter is computed here too (`logp_ala`, `delta_ala` in
-`data/*_specificity.tsv`), which makes the two directly comparable on the same designs.
+`data/*_specificity.tsv`). Comparing the two over designs, the decoy panel matters more to how
+designs rank than the choice of baseline does — `analysis/reproduce.py` prints the detail.
 
-**Which addition actually does the work — measured, not asserted.** Spearman ρ of each variant
-against the full metric, over designs in each arm:
-
-| scoring | repurposed | KH46 | free |
-|---|---:|---:|---:|
-| alanine baseline, **with** decoys | +0.61 | +0.68 | +0.84 |
-| no baseline at all, **with** decoys | +0.68 | +0.74 | +0.86 |
-| alanine baseline, **no** decoys — as described by Liu et al. | **+0.16** | **+0.29** | **+0.36** |
-
-The **decoy panel** drives design ranking. Swap the baseline but keep decoys and the ordering
-largely survives; drop decoys and it does not. The holo − apo baseline is worth much less for
-ranking than the decoy comparison is — about a third to a half of the top quartile changes
-identity, but the correlation stays moderate either way.
-
-Where the baseline is **not** optional is per-position interpretation, below.
+Where the baseline is not optional is in reading the result per position.
 
 Mean holo − apo per peptide position, NY-ESO-1:
 
@@ -212,11 +199,10 @@ free diffusion at 5.5% in between, so some donors are worse than no donor. But a
 come from a **single source target**, so donor identity and locus cannot be separated in this
 design. No claim about HLA locus is supportable in either direction.
 
-**The comparison against Liu et al.'s filter is a comparison of methods, not results.**
-Their specificity numbers are not published, so everything here compares *my implementation
-of the filter as they describe it* against mine, on my data. Theirs also sits upstream of
-yeast display and individual characterisation — whatever it selected was checked against
-binding. Nothing here was.
+**Where this touches Liu et al.'s filter, it compares methods and not results.** Their
+specificity numbers are not published, so the comparison is against *my implementation of the
+filter as they describe it*. Theirs also sits upstream of yeast display and characterisation;
+nothing here was checked against binding.
 
 **The decoys are easy.** None of the four shares a residue with the target at the positions the
 binders actually read. The filter has not been tested against near-neighbour peptides.

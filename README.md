@@ -4,7 +4,7 @@ A controlled benchmark of **partial diffusion from privileged scaffolds** agains
 for de novo binders to peptide–MHC targets. Five arms, two targets, ~3,400 designs, identical
 filters throughout.
 
-**Short answer: it depends on the target.**
+**Short answer: it probably depends on the target.**
 
 ---
 

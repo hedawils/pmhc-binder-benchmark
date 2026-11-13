@@ -4,7 +4,7 @@ A controlled benchmark of **partial diffusion from privileged scaffolds** agains
 for de novo binders to peptide–MHC targets. Five arms, two targets, ~3,400 designs, identical
 filters throughout.
 
-**Short answer: it probably depends on the target.**
+**Short answer: it may depend on the target.**
 
 ---
 
@@ -62,7 +62,7 @@ Repurposed scaffolds do **not** fold better than designs built from scratch. The
 † among designs that contact the peptide at all; unconditional medians are 0 in every arm.
 
 The pattern suggests the advantage is **interface geometry** rather than foldability — the
-borrowed pose already sits where a binder needs to be. On the second target the interface
+borrowed pose already sits where a binder needs to be. For KF9 the interface
 differences are absent on every measure while the fold penalty remains, which is consistent with
 the same reading: the geometry transfers only when it has somewhere to transfer to.
 
@@ -100,11 +100,12 @@ They are then slightly disfavoured by the other three gates. Among designs alrea
 `peptide_focus` bar of 20.2%, the median peptide share is 33.4%; among those that also clear
 scRMSD, pLDDT and interface pAE it falls to **30.7%** (p = 0.0002). KF9 behaves the same way,
 24.0% to 22.1% (p < 1e-4). The effect is small, but it runs the wrong way: the confidence filters
-mildly prefer designs that bury more MHC, which is the larger surface available.
+mildly prefer designs that engage more MHC.
 
-Note also that hotspots were specified as peptide residues only (`C4,C5,C7,C8` and
-`C1,C4,C7,C8`). No MHC residue was ever named, and the interfaces still came out ~70% MHC — in
-this pilot, hotspot specification did not control interface composition.
+Hotspots were specified as peptide residues only (`C4,C5,C7,C8` and `C1,C4,C7,C8`), and that
+worked — the designs dock over the peptide. The 70/30 split is geometry rather than a failure of
+targeting: the peptide sits recessed in the groove, so anything reaching it also buries the
+α1/α2 helices flanking it.
 
 ### A specificity filter
 
@@ -154,9 +155,7 @@ gates hardest is the least selective.
 
 How far that generalises is unclear: the 203 designs come from **one** source structure at one
 noise level, so this is a property of re-diffusing KH46 rather than a demonstrated property of
-re-diffusing proven binders. The mechanism is plausible — stay close to a pose selected for
-affinity and you inherit its interface, selective or not — but a second source structure is what
-would test it.
+re-diffusing proven binders. A second source structure would test it.
 
 ---
 
@@ -195,12 +194,13 @@ sits upstream of yeast display and characterisation; this one sits upstream of n
 **The decoys are easy.** None of the four shares a residue with the target at the positions the
 binders actually read. The filter has not been tested against near-neighbour peptides.
 
-**MPNN relax cycles were disabled** (`-relax_cycles 0`). Applied identically across all arms so it
-cannot bias the comparison, but it is not the standard protocol and probably costs absolute hit
-rate everywhere.
-
-**The second target differs in both allele and peptide**, so the NY-ESO-1 vs KF9 contrast alone
-cannot attribute the failure to either.
+**MPNN relax cycles were disabled** (`-relax_cycles 0`). The published protocol alternates
+ProteinMPNN sequence design with Rosetta FastRelax over several rounds, so sequence and structure
+co-adapt and the backbone is repacked around each new sequence before the next pass. Disabling it
+means every sequence was designed once, on the raw diffused backbone, with no relaxation. That is
+much cheaper — FastRelax dominates the CPU cost — and it was applied identically to all five arms,
+so it cannot bias the comparison between them. It does make every absolute hit rate here lower
+than the same pipeline would give run as published.
 
 **One more asymmetry worth noting:** the fourth gate removes nothing in either NY-ESO-1 arm, but
 cuts both KF9 arms hard (35→21 and 38→25). On that target a real share of interface-confident

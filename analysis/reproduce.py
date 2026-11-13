@@ -281,15 +281,47 @@ def section_3_interface_composition():
 
 
 def _specificity(key):
-    """design -> condition -> position -> holo-minus-apo delta."""
+    """design -> condition -> position -> {d, a, h}.
+
+    d = delta      = logp_holo - logp_apo   (this work's baseline)
+    a = delta_ala  = logp_holo - logp_ala   (the alanine difference Liu et al. describe)
+    h = logp_holo                           (no baseline at all)
+    """
     per = defaultdict(lambda: defaultdict(dict))
     with open(DATA / f"{key}_specificity.tsv") as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
             try:
-                per[r["design"]][r["condition"]][int(r["position"])] = float(r["delta"])
+                per[r["design"]][r["condition"]][int(r["position"])] = {
+                    "d": float(r["delta"]),
+                    "a": float(r["delta_ala"]),
+                    "h": float(r["logp_holo"]),
+                }
             except (TypeError, ValueError):
                 pass
     return per
+
+
+def _rankvec(v):
+    idx = sorted(range(len(v)), key=lambda i: v[i])
+    r = [0.0] * len(v)
+    i = 0
+    while i < len(idx):
+        j = i
+        while j + 1 < len(idx) and v[idx[j + 1]] == v[idx[i]]:
+            j += 1
+        avg = (i + j) / 2.0 + 1
+        for k in range(i, j + 1):
+            r[idx[k]] = avg
+        i = j + 1
+    return r
+
+
+def spearman(a, b):
+    ra, rb = _rankvec(a), _rankvec(b)
+    ma, mb = st.mean(ra), st.mean(rb)
+    num = sum((x - ma) * (y - mb) for x, y in zip(ra, rb))
+    den = math.sqrt(sum((x - ma) ** 2 for x in ra) * sum((y - mb) ** 2 for y in rb))
+    return num / den if den else float("nan")
 
 
 def section_4_positions():

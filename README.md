@@ -242,11 +242,16 @@ designs grip the MHC rather than the peptide.
 data/           every design, every gate — 15 TSVs, one row per design
 analysis/       scripts that turn data/ into the results above
 pipeline/       what ran on the GPU box to produce data/
-structures/     337 designs that passed all four gates
+structures/     NOT IN THIS REPO -- see below
 targets/        the three target structures
 reproduce_env.sh   rebuild the environment from pinned commits
 docs/           internal working notes
 ```
+
+**The 337 surviving structures are not in this repository.** They are ~131 MB, which would
+make cloning unpleasant for everyone who only wants the data and the code. They are not
+re-creatable either — diffusion is stochastic, so re-running the pipeline produces different
+designs, not these. If you want them, open an issue and I will attach them to a release.
 
 `data/manifest_{liu,kf9}.tsv` is the join key for donor provenance — source target, allele,
 peptide and transplant-stage geometry for each scaffold.
